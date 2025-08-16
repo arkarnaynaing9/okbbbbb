@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Section - Vanilla Implementation</title>
+    <style>
+        /* This is the complete vanilla CSS/JS implementation of the Skills section */
+        .skills-section {
+            padding: 80px 24px;
+            position: relative;
+            background: #0f172a;
+            color: #f8fafc;
+            overflow: hidden;
+        }
+
+        .skills-container {
+            max-width: 1152px; /* 6xl */
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .skills-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .skills-title {
+            font-size: 3rem;
+            font-family: 'Playfair Display', Georgia, serif;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #3b82f6, #06b6d4, #8b5cf6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-size: 200% 200%;
+            animation: gradient-text 8s linear infinite;
+            position: relative;
+        }
+
+        .skills-subtitle {
+            color: #94a3b8;
+            max-width: 32rem;
+            margin: 0 auto;
+            font-size: 1.125rem;
+            line-height: 1.75;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 32px;
+            margin-bottom: 64px;
+        }
+
+        .skill-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+        }
+
+        .skill-card:hover .animated-border {
+            opacity: 1;
+        }
+
+        .animated-border {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+            background-size: 400% 400%;
+            animation: gradient-border 3s ease infinite;
+            padding: 1px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: #1e293b;
+            border-radius: 7px;
+        }
+
+        .skill-card-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .skill-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+            transform: perspective(100px) rotateX(15deg) rotateY(-15deg);
+            transition: all 0.2s ease;
+        }
+
+        .skill-icon:hover {
+            transform: perspective(100px) rotateX(15deg) rotateY(10deg) scale(1.1);
+        }
+
+        .skill-category-title {
+            font-size: 1.25rem;
+            font-family: 'Playfair Display', Georgia, serif;
+            background: linear-gradient(to right, #f8fafc, #94a3b8);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 600;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .skill-item {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideInLeft 0.5s ease forwards;
+        }
+
+        .skill-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #f8fafc;
+        }
+
+        .skill-percentage {
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .skill-progress-bg {
+            width: 100%;
+            background: rgba(51, 65, 85, 0.2);
+            border-radius: 9999px;
+            height: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .skill-progress-bar {
+            height: 100%;
+            border-radius: 9999px;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            position: relative;
+            overflow: hidden;
+            width: 0%;
+            transition: width 1.2s ease-out;
+        }
+
+        .skill-progress-shimmer {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s linear infinite;
+        }
+
+        .core-competencies {
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            animation: slideInUp 0.8s ease forwards;
+            animation-delay: 1s;
+        }
+
+        .competencies-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .competencies-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, #3b82f6, #06b6d4, #8b5cf6, #3b82f6);
+            background-size: 400% 400%;
+            animation: gradient-shift 8s ease infinite;
+            opacity: 0.1;
+        }
+
+        .competencies-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .competencies-title {
+            font-size: 1.5rem;
+            margin-bottom: 32px;
+            text-align: center;
+            font-family: 'Playfair Display', Georgia, serif;
+            background: linear-gradient(to right, #3b82f6, #06b6d4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .competency-badge {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            background: transparent;
+            color: #f8fafc;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(0);
+            animation: popIn 0.4s ease forwards;
+        }
+
+        .competency-badge:hover {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+
+        .competency-badge .badge-glow {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(59, 130, 246, 0.2), rgba(6, 182, 212, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .competency-badge:hover .badge-glow {
+            opacity: 1;
+        }
+
+        .competency-badge span {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Floating background particles */
+        .floating-particles {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .gradient-line {
+            position: absolute;
+            top: 25%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(59, 130, 246, 0.3), transparent);
+            animation: pulse-line 8s ease-in-out infinite;
+        }
+
+        /* Animations */
+        @keyframes gradient-text {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes gradient-border {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes slideInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        @keyframes popIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); opacity: 0.3; }
+            50% { transform: translateY(-20px) scale(1.2); opacity: 0.8; }
+        }
+
+        @keyframes pulse-line {
+            0%, 100% { 
+                transform: scaleX(0);
+                opacity: 0;
+            }
+            50% { 
+                transform: scaleX(1);
+                opacity: 0.6;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .skills-title {
+                font-size: 2.5rem;
+            }
+            
+            .skill-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skills Section -->
+    <section id="skills" class="skills-section">
+        <!-- Animated background elements -->
+        <div class="floating-particles">
+            <!-- Floating skill particles -->
+            <div class="particle" style="left: 20%; top: 15%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 35%; top: 35%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 50%; top: 55%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 65%; top: 75%; animation-delay: 1.5s;"></div>
+            <div class="particle" style="left: 80%; top: 25%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 25%; top: 85%; animation-delay: 2.5s;"></div>
+            <div class="particle" style="left: 75%; top: 45%; animation-delay: 3s;"></div>
+            <div class="particle" style="left: 40%; top: 65%; animation-delay: 3.5s;"></div>
+            
+            <!-- Neon gradient line -->
+            <div class="gradient-line"></div>
+        </div>
+
+        <div class="skills-container">
+            <div class="skills-header">
+                <h2 class="skills-title">Skills & Expertise</h2>
+                <p class="skills-subtitle">
+                    A comprehensive toolkit combining design thinking with technical implementation
+                </p>
+            </div>
+            
+            <!-- Skill Categories with 3D Icons -->
+            <div class="skills-grid">
+                <div class="skill-card" style="animation-delay: 0s;">
+                    <div class="animated-border"></div>
+                    <div class="skill-card-content">
+                        <div class="skill-header">
+                            <div class="skill-icon">🎨</div>
+                            <h3 class="skill-category-title">Design Tools</h3>
+                        </div>
+                        
+                        <div class="skills-list">
+                            <div class="skill-item" style="animation-delay: 0.2s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Figma</span>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="95">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.25s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Sketch</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="85">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.3s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Adobe XD</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="90">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.35s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Photoshop</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="80">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.4s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Illustrator</span>
+                                    <span class="skill-percentage">75%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="75">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.45s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Framer</span>
+                                    <span class="skill-percentage">70%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="70">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card" style="animation-delay: 0.1s;">
+                    <div class="animated-border"></div>
+                    <div class="skill-card-content">
+                        <div class="skill-header">
+                            <div class="skill-icon">💻</div>
+                            <h3 class="skill-category-title">Frontend Development</h3>
+                        </div>
+                        
+                        <div class="skills-list">
+                            <div class="skill-item" style="animation-delay: 0.3s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">HTML/CSS</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="90">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.35s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">JavaScript</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="85">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.4s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">React</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="80">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.45s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">TypeScript</span>
+                                    <span class="skill-percentage">75%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="75">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.5s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Tailwind CSS</span>
+                                    <span class="skill-percentage">88%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="88">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.55s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">SASS/SCSS</span>
+                                    <span class="skill-percentage">70%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="70">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card" style="animation-delay: 0.2s;">
+                    <div class="animated-border"></div>
+                    <div class="skill-card-content">
+                        <div class="skill-header">
+                            <div class="skill-icon">🔬</div>
+                            <h3 class="skill-category-title">UX Research</h3>
+                        </div>
+                        
+                        <div class="skills-list">
+                            <div class="skill-item" style="animation-delay: 0.4s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">User Interviews</span>
+                                    <span class="skill-percentage">92%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="92">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.45s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Usability Testing</span>
+                                    <span class="skill-percentage">88%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="88">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.5s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">A/B Testing</span>
+                                    <span class="skill-percentage">75%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="75">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.55s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Surveys</span>
+                                    <span class="skill-percentage">80%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="80">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.6s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Analytics</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="85">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.65s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Heatmaps</span>
+                                    <span class="skill-percentage">70%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="70">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-card" style="animation-delay: 0.3s;">
+                    <div class="animated-border"></div>
+                    <div class="skill-card-content">
+                        <div class="skill-header">
+                            <div class="skill-icon">⚡</div>
+                            <h3 class="skill-category-title">Design Systems</h3>
+                        </div>
+                        
+                        <div class="skills-list">
+                            <div class="skill-item" style="animation-delay: 0.5s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Design Tokens</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="90">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.55s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Component Libraries</span>
+                                    <span class="skill-percentage">85%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="85">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.6s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Style Guides</span>
+                                    <span class="skill-percentage">88%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="88">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.65s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Accessibility</span>
+                                    <span class="skill-percentage">82%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="82">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.7s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Responsive Design</span>
+                                    <span class="skill-percentage">95%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="95">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="skill-item" style="animation-delay: 0.75s;">
+                                <div class="skill-name-row">
+                                    <span class="skill-name">Prototyping</span>
+                                    <span class="skill-percentage">90%</span>
+                                </div>
+                                <div class="skill-progress-bg">
+                                    <div class="skill-progress-bar" data-level="90">
+                                        <div class="skill-progress-shimmer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Core Competencies -->
+            <div class="core-competencies">
+                <div class="competencies-card">
+                    <div class="competencies-bg"></div>
+                    
+                    <div class="competencies-content">
+                        <h3 class="competencies-title">Core Competencies</h3>
+                        
+                        <div class="badges-container">
+                            <div class="competency-badge" style="animation-delay: 1.3s;">
+                                <div class="badge-glow"></div>
+                                <span>Visual Design</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.35s;">
+                                <div class="badge-glow"></div>
+                                <span>Interaction Design</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.4s;">
+                                <div class="badge-glow"></div>
+                                <span>User Experience Design</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.45s;">
+                                <div class="badge-glow"></div>
+                                <span>Information Architecture</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.5s;">
+                                <div class="badge-glow"></div>
+                                <span>Wireframing & Prototyping</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.55s;">
+                                <div class="badge-glow"></div>
+                                <span>Design Systems</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.6s;">
+                                <div class="badge-glow"></div>
+                                <span>Frontend Development</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.65s;">
+                                <div class="badge-glow"></div>
+                                <span>Responsive Design</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.7s;">
+                                <div class="badge-glow"></div>
+                                <span>Accessibility (WCAG)</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.75s;">
+                                <div class="badge-glow"></div>
+                                <span>Design Thinking</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.8s;">
+                                <div class="badge-glow"></div>
+                                <span>Agile/Scrum</span>
+                            </div>
+                            <div class="competency-badge" style="animation-delay: 1.85s;">
+                                <div class="badge-glow"></div>
+                                <span>Cross-functional Collaboration</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Intersection Observer for scroll animations
+        function createIntersectionObserver() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const target = entry.target;
+                        
+                        // Animate skill progress bars
+                        if (target.classList.contains('skill-progress-bar')) {
+                            const level = target.getAttribute('data-level');
+                            setTimeout(() => {
+                                target.style.width = level + '%';
+                            }, 400);
+                        }
+                        
+                        // Add visible class for other animations
+                        target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all skill progress bars
+            document.querySelectorAll('.skill-progress-bar').forEach(bar => {
+                observer.observe(bar);
+            });
+
+            // Observe all animated elements
+            document.querySelectorAll('.skill-card, .core-competencies, .skill-item').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            createIntersectionObserver();
+            
+            // Add some interactive hover effects
+            document.querySelectorAll('.skill-icon').forEach(icon => {
+                icon.addEventListener('mouseenter', function() {
+                    this.style.transform = 'perspective(100px) rotateX(15deg) rotateY(10deg) scale(1.1)';
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'perspective(100px) rotateX(15deg) rotateY(-15deg) scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
