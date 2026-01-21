@@ -2,10 +2,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 
 const roles = [
-  { en: "UI/UX Designer", jp: "デザイナー", translation: "Designer" },
-  { en: "UI/UX Designer", jp: "ユーザー体験", translation: "User Experience" },
-  { en: "UI/UX Designer", jp: "インターフェース", translation: "Interface" },
-  { en: "UI/UX Designer", jp: "創造者", translation: "Creator" }
+  { en: "UX/UI Designer", jp: "デザイナー", translation: "Designer" },
+  { en: "UX/UI Designer", jp: "ユーザー体験", translation: "User Experience" },
+  { en: "UX/UI Designer", jp: "インターフェース", translation: "Interface" },
+  { en: "UX/UI Designer", jp: "創造者", translation: "Creator" }
 ];
 
 export function AnimatedRoleText() {
@@ -54,7 +54,7 @@ export function AnimatedRoleText() {
       </AnimatePresence>
       
       {/* Invisible placeholder to maintain layout - increased width */}
-      <span className="invisible font-bold whitespace-nowrap">UI/UX Designer</span>
+      <span className="invisible font-bold whitespace-nowrap">UX/UI Designer</span>
       
       {/* Subtle indicator for Japanese mode */}
       <AnimatePresence>

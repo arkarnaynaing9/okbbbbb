@@ -2,10 +2,10 @@
 
 // Animated Role Text Data - Exactly matching React component
 const roles = [
-    { en: "UI/UX Designer", jp: "デザイナー", translation: "Designer" },
-    { en: "UI/UX Designer", jp: "ユーザー体験", translation: "User Experience" },
-    { en: "UI/UX Designer", jp: "インターフェース", translation: "Interface" },
-    { en: "UI/UX Designer", jp: "創造者", translation: "Creator" }
+    { en: "UX/UI Designer", jp: "デザイナー", translation: "Designer" },
+    { en: "UX/UI Designer", jp: "ユーザー体験", translation: "User Experience" },
+    { en: "UX/UI Designer", jp: "インターフェース", translation: "Interface" },
+    { en: "UX/UI Designer", jp: "创意创造者", translation: "Creator" }
 ];
 
 // Global Variables
@@ -16,44 +16,48 @@ let isAnimating = false;
 // Portfolio Projects Data - Matching your React portfolio exactly
 const portfolioProjects = [
     {
-        title: "CinemaBook - Movie Ticket System",
-        year: "2024",
-        badge: "Web Application",
-        description: "A comprehensive movie ticket booking platform featuring real-time seat selection, multiple payment options, and intuitive user flow. Designed to streamline the cinema experience from movie discovery to ticket confirmation.",
-        image: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&h=600&fit=crop&crop=center",
-        tags: ["React", "Node.js", "Real-time", "Payment Gateway", "Mobile-First"],
+        title: "AgriDiagnose",
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "An AI-powered agricultural platform with a clean, user-friendly landing page designed to clearly communicate crop disease diagnosis, benefits, and actions, simplifying complex technology for farmers.",
+        image: "./AgriDiagnose.png",
+        tags: ["UX/UI Design", "Landing Page", "AI-Powered", "Agriculture Tech", "Mobile-First"],
         duration: "3 months",
-        client: "Personal Project"
+        client: "Company Project",
+        link: "https://www.behance.net/gallery/242606013/AgriDiagnose?"
     },
     {
         title: "LH Bank AI Assistant",
-        year: "2024",
-        badge: "UI/UX Design",
-        description: "Interactive AI chatbot animations and interface design for LH Bank's customer service platform. Features include natural conversation flows, smooth micro-interactions, and contextual help animations to enhance user engagement.",
-        image: "https://cdn.dribbble.com/userupload/17818225/file/still-77fc6ade74311548b9ca1cd679c9800e.png?resize=400x300",
-        tags: ["UI Animation", "Micro-interactions", "Banking UX", "AI Interface", "Figma"],
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "AI voice assistant interface featuring a responsive sphere animation component that visually represents listening, processing, and responding states, designed to enhance clarity and user trust during voice interactions.",
+        image: "./LHBank.png",
+        tags: ["UX/UI Desgin", "Voice Assistant Animation", "AI-Powered", "Banking Technology", "Mobile-First"],
         duration: "2 months",
-        client: "LH Bank"
+        client: "LH Bank",
+        link: "https://www.behance.net/gallery/242609413/Ai-Voice-Assistan"
     },
     {
-        title: "Millian Cake E-commerce",
-        year: "2024",
-        badge: "Full-Stack Development",
-        description: "Custom e-commerce platform for Millian Cake Company featuring elegant product showcases, seamless ordering system, and mobile-optimized checkout. Focused on creating a delightful shopping experience for premium baked goods.",
-        image: "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=800&h=600&fit=crop&crop=center",
-        tags: ["E-commerce", "React", "Responsive Design", "Cart System", "Food Tech"],
+        title: "Dova",
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "Contributed to the full redesign of the DOVA app, creating a comprehensive design system and collaborating with the team to improve usability and visual consistency. The project involved OCR integration and mobile-first optimization for a smoother user experience.",
+        image: "./Dova1.png",
+        tags: ["UX/UI Design", "OCR Technology", "Design System", "App Redesign", "Team Collaboration"],
         duration: "4 months",
-        client: "Millian Cake Company"
+        client: "Company Project",
+        link: ""
     },
     {
-        title: "Veracity - Digital Signature App",
-        year: "2023",
-        badge: "UI/UX Design",
-        description: "Secure digital signature application with document management, multi-party signing workflows, and compliance features. Built with a focus on security, user experience, and legal document integrity.",
-        image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&h=600&fit=crop&crop=center",
-        tags: ["Digital Security", "Document Management", "Authentication", "PDF Processing", "Legal Tech"],
+        title: "Chat Framework",
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "Collaborated as a team member to completely redesign the Chat Framework web app. Focused on improving usability, visual consistency, and responsive layout, creating an intuitive interface optimized for users.",
+        image: "./ChatFramework.png",
+        tags: ["UX/UI Design", "Web App", "App Redesign", "Team Collaboration", "AI Chat"],
         duration: "6 months",
-        client: "Enterprise Client"
+        client: "Company Project",
+        link: ""
     }
 ];
 
@@ -153,6 +157,10 @@ function setupAnimatedRoleText() {
     // Set initial text
     roleElement.textContent = roles[0].en;
     roleElement.style.transition = 'opacity 0.6s ease, filter 0.6s ease';
+    setAnimatedRoleWidth(roleElement);
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => setAnimatedRoleWidth(roleElement));
+    }
     
     console.log('🎭 Starting role animation...');
     
@@ -160,6 +168,42 @@ function setupAnimatedRoleText() {
     setTimeout(() => {
         animateRoleText();
     }, 2000);
+}
+
+// Keep the animated role span width steady so the prefix never shifts
+function setAnimatedRoleWidth(roleElement) {
+    if (!document.body) return;
+
+    const tester = document.createElement('span');
+    tester.className = 'animated-role';
+    tester.style.position = 'absolute';
+    tester.style.visibility = 'hidden';
+    tester.style.pointerEvents = 'none';
+    tester.style.whiteSpace = 'nowrap';
+    tester.style.transition = 'none';
+    tester.style.opacity = '0';
+    tester.style.transform = 'translate(-9999px, -9999px)';
+
+    const texts = roles.reduce((acc, role) => {
+        acc.push(role.en, role.jp);
+        return acc;
+    }, []);
+
+    document.body.appendChild(tester);
+
+    let maxWidth = 0;
+    texts.forEach(text => {
+        tester.textContent = text;
+        maxWidth = Math.max(maxWidth, tester.offsetWidth);
+    });
+
+    document.body.removeChild(tester);
+
+    if (maxWidth > 0) {
+        const widthPx = `${Math.ceil(maxWidth)}px`;
+        roleElement.style.width = widthPx;
+        roleElement.style.flex = `0 0 ${widthPx}`;
+    }
 }
 
 // Animate Role Text - Matching React logic exactly
@@ -216,7 +260,6 @@ function loadPortfolioProjects() {
                     <img src="${project.image}" alt="${project.title}" loading="lazy">
                     <div class="project-overlay"></div>
                     <div class="project-meta">
-                        <div class="meta-item">Duration: ${project.duration}</div>
                         <div class="meta-client">${project.client}</div>
                     </div>
                 </div>
@@ -229,7 +272,7 @@ function loadPortfolioProjects() {
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
-                    <button class="project-btn" onclick="handleProjectClick('${project.title}')">View Case Study</button>
+                    ${project.link ? `<button class="project-btn" onclick="handleProjectClick('${project.link}')">View Case Study</button>` : ''}
                 </div>
             </div>
         `).join('');
@@ -276,10 +319,10 @@ function setupProjectCardInteractions() {
 }
 
 // Handle project button clicks
-function handleProjectClick(projectTitle) {
-    console.log(`🔍 Viewing case study for: ${projectTitle}`);
-    // Add your project navigation logic here
-    alert(`Case study for "${projectTitle}" coming soon!`);
+function handleProjectClick(link) {
+    if(link){
+        window.open(link, '_blank');
+    }
 }
 
 // Scroll Animations Setup
@@ -318,7 +361,16 @@ function setupContactForm() {
     const contactForm = document.querySelector('.contact-form');
     if (!contactForm) return;
 
-    contactForm.addEventListener('submit', function(e) {
+    let statusElement = contactForm.querySelector('.form-status');
+    if (!statusElement) {
+        statusElement = document.createElement('p');
+        statusElement.className = 'form-status';
+        statusElement.setAttribute('role', 'status');
+        statusElement.setAttribute('aria-live', 'polite');
+        contactForm.appendChild(statusElement);
+    }
+
+    contactForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // Get form data
@@ -333,22 +385,42 @@ function setupContactForm() {
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
-        
-        // Simulate form submission
-        setTimeout(() => {
+        statusElement.textContent = '';
+        statusElement.classList.remove('success', 'error');
+
+        try {
+            const response = await fetch('/.netlify/functions/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.ok) {
+                throw new Error(result.error || 'Failed to send message');
+            }
+
             this.reset();
-            
+            statusElement.textContent = 'Thanks! Your message is on its way.';
+            statusElement.classList.add('success');
             submitBtn.textContent = 'Message Sent! ✨';
             submitBtn.style.background = '#10b981';
-            
+        } catch (error) {
+            console.error('Contact form error:', error);
+            statusElement.textContent = 'Sorry, something went wrong. Please try again later.';
+            statusElement.classList.add('error');
+            submitBtn.textContent = 'Try Again';
+            submitBtn.style.background = '#ef4444';
+        } finally {
             setTimeout(() => {
                 submitBtn.textContent = originalText;
                 submitBtn.style.background = '';
                 submitBtn.disabled = false;
             }, 3000);
-            
-            console.log('📧 Form submitted:', formObject);
-        }, 2000);
+        }
     });
 
     // Form field animations
