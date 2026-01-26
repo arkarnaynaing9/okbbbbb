@@ -46,7 +46,7 @@ const portfolioProjects = [
         tags: ["UX/UI Design", "Corporate Website", "Web UI", "Responsive Design"],
         duration: "4 months",
         client: "Company Project",
-        link: ""
+        link: "https://www.fusionsol.com/en/"
     },
     {
         title: "Veracity",
@@ -294,7 +294,7 @@ function loadPortfolioProjects() {
                     <div class="project-tags">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
-                    ${project.link ? `<button class="project-btn" onclick="handleProjectClick('${project.link}')">View Case Study</button>` : ''}
+                    ${project.link ? `<button class="project-btn" onclick="handleProjectClick('${project.link}')">${project.title == 'Fusion Solution Website' ? 'View Website' : 'View Case Study'}</button>` : ''}
                 </div>
             </div>
         `).join('');
