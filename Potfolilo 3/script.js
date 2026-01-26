@@ -38,6 +38,28 @@ const portfolioProjects = [
         link: "https://www.behance.net/gallery/242609413/Ai-Voice-Assistan"
     },
     {
+        title: "Fusion Solution Website",
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "Designed a modern corporate website with a focus on visual hierarchy, clear content structure, and responsive UI. Created a consistent design system and high-fidelity interfaces to strengthen the brand’s digital presence.",
+        image: "./Fusion.png",
+        tags: ["UX/UI Design", "Corporate Website", "Web UI", "Responsive Design"],
+        duration: "4 months",
+        client: "Company Project",
+        link: ""
+    },
+    {
+        title: "Veracity",
+        year: "2025",
+        badge: "UX/UI Design",
+        description: "Designed key interfaces for a digital signature platform, improving usability and visual consistency to support efficient and secure document signing.",
+        image: "./Veracity.png",
+        tags: ["UX/UI Design", "SaaS Product", "Web App", "Design System"],
+        duration: "6 months",
+        client: "Company Project",
+        link: ""
+    },
+    {
         title: "Dova",
         year: "2025",
         badge: "UX/UI Design",
