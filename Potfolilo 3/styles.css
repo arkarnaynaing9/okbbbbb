@@ -701,7 +701,7 @@ body {
   font-weight: 700;
   color: var(--primary);
   flex: 0 0 auto;
-  min-width: 12.5rem;
+  min-width: 210px;
   display: inline-block;
   text-align: left;
   font-size: 0.9em;
